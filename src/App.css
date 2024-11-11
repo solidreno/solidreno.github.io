@@ -8,15 +8,11 @@ body, input, select, option {
     font-size: medium;
 }
 
-select {
-    height: 5vh;
-}
-
 .column {
     display: flex;
     flex-direction: column;
-    width: 45vw;
-    padding: 2vw;
+    width: 20vw;
+    padding: 1vw;
 }
 
 .stones {
@@ -37,11 +33,12 @@ select {
 
 #grid {
     display: flex;
+    justify-content: space-around;
 }
 
 .multiplier {
     justify-items: end;
-    margin-bottom: 2vh;
+    padding: 1vw;
 }
 
 .ins {
@@ -59,7 +56,6 @@ select {
 }
 
 .subTot {
-    margin-top: 1vh;
     font-size: large;
 }
 
@@ -81,25 +77,30 @@ select {
 
 .blue {
     background-position: 50% 0%;
+    background-color: #139dd5;
 }
 
 .yellow {
     background-position: 50% 25%;
+    background-color: #facd22;
 }
 
 .red {
     background-position: 25% 12.5%;
+    background-color: #f24e4c;
 }
 
 .purple {
     background-position: 0% 50%;
+    background-color: #7b5fb4;
 }
 
 .green {
     background-position: 0% 25%;
+    background-color: #4fb94e;
 }
 
 .hex {
-    height: 56px;
-    width: 65px;
+    height: 67px;
+    width: 79px;
 }

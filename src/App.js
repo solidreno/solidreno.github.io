@@ -11,6 +11,8 @@ function App() {
         <FirstColumn></FirstColumn>
         <Column></Column>
         <Column></Column>
+        <Column></Column>
+        <Column></Column>
       </div>
     </div>
   );
