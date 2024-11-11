@@ -17,21 +17,30 @@ function Multiplier ({update, isGreen}) {
 
     return (
         <div className="multiplier">
-            {
-                (isGreen) ?
-                <select onChange={updateStars} value={stars}>
-                    <option value="0">0</option>
-                    <option value="3">3</option>
-                    <option value="6">6</option>
-                </select> :
-                <select onChange={updateStars} value={stars}>
-                    <option value="0">0</option>
-                    <option value="2">2</option>
-                    <option value="4">4</option>
-                </select>
-            }
-            <input onChange={updateNumber} type="number" value={number}></input>
-            <span>{stars * number}</span>
+            <div className="ins">
+                {
+                    (isGreen) ?
+                    <select onChange={updateStars} value={stars}>
+                        <option value="0">0</option>
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="9">9</option>
+                        <option value="12">12</option>
+                        <option value="15">15</option>
+                    </select> :
+                    <select onChange={updateStars} value={stars}>
+                        <option value="0">0</option>
+                        <option value="2">2</option>
+                        <option value="4">4</option>
+                        <option value="6">6</option>
+                        <option value="8">8</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                    </select>
+                }
+                <input onChange={updateNumber} type="number" value={number}></input>
+            </div>
+            <div className="subTot">{stars * number}</div>
         </div>
     )
 }

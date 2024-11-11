@@ -1,6 +1,33 @@
+@font-face {
+    font-family: "Akro";
+    src: url('AlegreyaSansSC-Bold.ttf') format('truetype');
+}
+
+body, input, select, option {
+    font-family: 'Akro', sans-serif;
+    font-size: medium;
+}
+
+select {
+    height: 5vh;
+}
+
 .column {
     display: flex;
     flex-direction: column;
+    width: 45vw;
+    padding: 2vw;
+}
+
+.stones {
+    margin-bottom: 2vh;
+    height: 5vh;
+}
+
+.total {
+    text-align: right;
+    font-size: larger;
+    font-weight: bold;
 }
 
 .app {
@@ -10,4 +37,69 @@
 
 #grid {
     display: flex;
+}
+
+.multiplier {
+    justify-items: end;
+    margin-bottom: 2vh;
+}
+
+.ins {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.ins select {
+    width: 45%;
+}
+
+.ins input {
+    width: 45%;
+}
+
+.subTot {
+    margin-top: 1vh;
+    font-size: large;
+}
+
+.face {
+    background-image: url(sprite.jpg);
+    clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+    height: 100%;
+    width: 100%;
+    background-size: auto 500%;
+}
+
+.cube {
+    background-image: url(Cube.png);
+    background-size: 95%;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+}
+
+.blue {
+    background-position: 50% 0%;
+}
+
+.yellow {
+    background-position: 50% 25%;
+}
+
+.red {
+    background-position: 25% 12.5%;
+}
+
+.purple {
+    background-position: 0% 50%;
+}
+
+.green {
+    background-position: 0% 25%;
+}
+
+.hex {
+    height: 56px;
+    width: 65px;
 }
