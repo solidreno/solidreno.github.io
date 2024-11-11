@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function Multiplier ({update, isGreen}) {
+function Multiplier ({update, color}) {
 
     const [stars, setStars] = useState(0)
     const [number, setNumber] = useState(0)
@@ -16,10 +16,10 @@ function Multiplier ({update, isGreen}) {
     }
 
     return (
-        <div className="multiplier">
+        <div className={"multiplier " + color}>
             <div className="ins">
                 {
-                    (isGreen) ?
+                    (color == 'green') ?
                     <select onChange={updateStars} value={stars}>
                         <option value="0">0</option>
                         <option value="3">3</option>
