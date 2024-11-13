@@ -7,13 +7,11 @@ function App() {
 
   return (
     <div className="app">
-      <div id="grid">
-        <FirstColumn></FirstColumn>
+        {/* <FirstColumn></FirstColumn> */}
         <Column></Column>
         <Column></Column>
         <Column></Column>
         <Column></Column>
-      </div>
     </div>
   );
 }
