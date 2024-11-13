@@ -33,11 +33,12 @@ body {
 }
 
 .total {
-    text-align: right;
     font-size: larger;
-    font-weight: bold;
-    flex: 1;
+    flex: 1 1;
     padding-right: 1.1vw;
+    display: flex;
+    justify-content: end;
+    align-items: center;
 }
 
 .app {

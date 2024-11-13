@@ -31,7 +31,7 @@ function Column () {
                 onChange={(e) => setStones(parseInt(e.target.value) ? parseInt(e.target.value) : 0 )}
                 value={stones} type="number"
                 placeholder={0}></input>
-            <span className="total">{getTotal()}</span>
+            <div className="total"><span>{getTotal()}</span></div>
         </div>
     )
 }
