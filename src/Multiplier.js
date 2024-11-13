@@ -5,7 +5,8 @@ function Multiplier ({update, color, starsPerTile}) {
     const MAX_TILES = 7
 
     const [stars, setStars] = useState(0)
-    const [number, setNumber] = useState(0)
+    const [number, setNumber] = useState('')
+    const total = stars * number
 
     let values = []
     for(let i=0; i<=MAX_TILES; i++) {
@@ -18,8 +19,8 @@ function Multiplier ({update, color, starsPerTile}) {
     }
 
     function updateNumber(e) {
-        setNumber(parseInt(e.target.value))
-        update(parseInt(stars), parseInt(e.target.value))
+        setNumber(parseInt(e.target.value) ? parseInt(e.target.value) : '')
+        update(parseInt(stars), parseInt(e.target.value) ? parseInt(e.target.value) : 0)
     }
 
     return (
@@ -30,9 +31,9 @@ function Multiplier ({update, color, starsPerTile}) {
                         values.map((val) => <option key={val} value={val}>{val}</option>)
                     }
                 </select>
-                <input onChange={updateNumber} type="number" value={number}></input>
+                <input onChange={updateNumber} onFocus={() => {setNumber(''); update(0, 0)}} placeholder={0} type="number" value={number}></input>
             </div>
-            <div className="subTot">{stars * number}</div>
+            <div className="subTot">{total}</div>
         </div>
     )
 }
