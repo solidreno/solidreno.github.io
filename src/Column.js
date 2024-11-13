@@ -8,7 +8,7 @@ function Column () {
     let [red, setRed] = useState(0)
     let [purple, setPurple] = useState(0)
     let [green, setGreen] = useState(0)
-    let [stones, setStones] = useState(0)
+    let [stones, setStones] = useState('')
 
     function getTotal() {
         return parseInt(blue) +
@@ -16,7 +16,7 @@ function Column () {
             parseInt(red) +
             parseInt(purple) +
             parseInt(green) +
-            parseInt(stones)
+            (parseInt(stones) ? parseInt(stones) : 0)
     }
 
     return (
@@ -26,7 +26,11 @@ function Column () {
             <Multiplier color="red" update={(stars, number) => setRed(stars * number)} starsPerTile={2}></Multiplier>
             <Multiplier color="purple" update={(stars, number) => setPurple(stars * number)} starsPerTile={2}></Multiplier>
             <Multiplier color="green" update={(stars, number) => setGreen(stars * number)} starsPerTile={3}></Multiplier>
-            <input className="stones" onChange={(e) => setStones(e.target.value)} value={stones} type="number"></input>
+            <input className="stones"
+                onFocus={() => setStones('')}
+                onChange={(e) => setStones(parseInt(e.target.value) ? parseInt(e.target.value) : 0 )}
+                value={stones} type="number"
+                placeholder={0}></input>
             <span className="total">{getTotal()}</span>
         </div>
     )

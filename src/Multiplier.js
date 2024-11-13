@@ -15,7 +15,7 @@ function Multiplier ({update, color, starsPerTile}) {
 
     function updateStars(e) {
         setStars(parseInt(e.target.value))
-        update(parseInt(e.target.value), parseInt(number))
+        update(parseInt(e.target.value), parseInt(number) ? parseInt(number) : 0)
     }
 
     function updateNumber(e) {
