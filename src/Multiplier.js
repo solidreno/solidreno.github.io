@@ -1,9 +1,16 @@
 import { useState } from "react"
 
-function Multiplier ({update, color}) {
+function Multiplier ({update, color, starsPerTile}) {
+
+    const MAX_TILES = 7
 
     const [stars, setStars] = useState(0)
     const [number, setNumber] = useState(0)
+
+    let values = []
+    for(let i=0; i<=MAX_TILES; i++) {
+        values.push(i * starsPerTile)
+    }
 
     function updateStars(e) {
         setStars(parseInt(e.target.value))
@@ -18,26 +25,11 @@ function Multiplier ({update, color}) {
     return (
         <div className={"multiplier " + color}>
             <div className="ins">
-                {
-                    (color == 'green') ?
-                    <select onChange={updateStars} value={stars}>
-                        <option value="0">0</option>
-                        <option value="3">3</option>
-                        <option value="6">6</option>
-                        <option value="9">9</option>
-                        <option value="12">12</option>
-                        <option value="15">15</option>
-                    </select> :
-                    <select onChange={updateStars} value={stars}>
-                        <option value="0">0</option>
-                        <option value="2">2</option>
-                        <option value="4">4</option>
-                        <option value="6">6</option>
-                        <option value="8">8</option>
-                        <option value="10">10</option>
-                        <option value="12">12</option>
-                    </select>
-                }
+                <select onChange={updateStars} value={stars}>
+                    {
+                        values.map((val) => <option key={val} value={val}>{val}</option>)
+                    }
+                </select>
                 <input onChange={updateNumber} type="number" value={number}></input>
             </div>
             <div className="subTot">{stars * number}</div>

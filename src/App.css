@@ -1,6 +1,7 @@
 @font-face {
     font-family: "Akro";
     src: url('AlegreyaSansSC-Bold.ttf') format('truetype');
+    font-display: swap;
 }
 
 body, input, select, option {
@@ -8,22 +9,35 @@ body, input, select, option {
     font-size: medium;
 }
 
+body {
+    padding: 2vh;
+}
+
+#first-col {
+    display: flex;
+    flex-direction: column;
+    width: 7vw;
+    height: 96vh;
+}
+
 .column {
     display: flex;
     flex-direction: column;
     width: 20vw;
-    padding: 1vw;
 }
 
 .stones {
-    margin-bottom: 2vh;
-    height: 5vh;
+    flex: 1 1;
+    padding-right: 1.1vw;
+    text-align: right;
 }
 
 .total {
     text-align: right;
     font-size: larger;
     font-weight: bold;
+    flex: 1;
+    padding-right: 1.1vw;
 }
 
 .app {
@@ -38,7 +52,7 @@ body, input, select, option {
 
 .multiplier {
     justify-items: end;
-    padding: 1vw;
+    padding: 2vh;
 }
 
 .ins {
@@ -53,54 +67,59 @@ body, input, select, option {
 
 .ins input {
     width: 45%;
+    text-align: right;
 }
 
 .subTot {
-    font-size: large;
+    padding-right: .5vw;
 }
 
 .face {
-    background-image: url(sprite.jpg);
+    /* background-image: url(sprite.webp); */
     clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
-    height: 100%;
-    width: 100%;
-    background-size: auto 500%;
-}
-
-.cube {
-    background-image: url(Cube.png);
-    background-size: 95%;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
+    height: 5vw;
+    width: 9vw;
+    /* background-size: auto 500%; */
 }
 
 .blue {
     background-position: 50% 0%;
-    background-color: #139dd5;
+    background-color: #38a2d1;
 }
 
 .yellow {
     background-position: 50% 25%;
-    background-color: #facd22;
+    background-color: #f5c155;
 }
 
 .red {
     background-position: 25% 12.5%;
-    background-color: #f24e4c;
+    background-color: #da4e49;
 }
 
 .purple {
     background-position: 0% 50%;
-    background-color: #7b5fb4;
+    background-color: #765c9d;
 }
 
 .green {
     background-position: 0% 25%;
-    background-color: #4fb94e;
+    background-color: #60ae63;
 }
 
 .hex {
-    height: 67px;
-    width: 79px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2vh;
+}
+
+.cube-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cube-container img {
+    width: 5vw;
 }
