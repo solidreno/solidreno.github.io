@@ -19,6 +19,7 @@
     width: 100vw;
     align-content: space-evenly;
     justify-content: space-evenly;
+    background-color: antiquewhite;
 }
 
 input {
@@ -44,6 +45,7 @@ input[type="number"]::-webkit-inner-spin-button {
     .multiplier {
         padding-bottom: 2vh;
         padding: 2vw;
+        border-radius: 1vh;
     }
 
     .ins {
@@ -67,6 +69,7 @@ input[type="number"]::-webkit-inner-spin-button {
     .multiplier {
         padding-bottom: 3vh;
         padding: 2vh;
+        border-radius: 1vw;
     }
 
     .ins {
