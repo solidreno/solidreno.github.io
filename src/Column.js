@@ -26,12 +26,15 @@ function Column () {
             <Multiplier color="red" update={(stars, number) => setRed(stars * number)} starsPerTile={2}></Multiplier>
             <Multiplier color="purple" update={(stars, number) => setPurple(stars * number)} starsPerTile={2}></Multiplier>
             <Multiplier color="green" update={(stars, number) => setGreen(stars * number)} starsPerTile={3}></Multiplier>
-            <input className="stones"
-                onFocus={() => setStones('')}
-                onChange={(e) => setStones(parseInt(e.target.value) ? parseInt(e.target.value) : 0 )}
-                value={stones} type="number"
-                placeholder={0}></input>
-            <div className="total"><span>{getTotal()}</span></div>
+            <div className="multiplier">
+                <input className="stones"
+                    onFocus={() => setStones('')}
+                    onChange={(e) => setStones(parseInt(e.target.value) ? parseInt(e.target.value) : 0 )}
+                    value={stones} type="number"
+                    placeholder={0}>
+                </input>
+            </div>
+            <div className="total multiplier"><span>{getTotal()}</span></div>
         </div>
     )
 }

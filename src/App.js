@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import './App.css';
 import Column from './Column';
-import FirstColumn from './FirstColumn';
 
 function App() {
 

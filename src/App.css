@@ -23,11 +23,17 @@
 
 input {
     text-align: right;
+    padding-right: 1vw;
 }
 
 input[type="number"]::-webkit-outer-spin-button, 
 input[type="number"]::-webkit-inner-spin-button { 
     -webkit-appearance: none; 
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
 }
 
 @media (orientation: portrait) {
@@ -36,12 +42,8 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     .multiplier {
-        margin-bottom: 1vh;
-        padding: 1.5vw;
-    }
-
-    .total {
-        margin-top: 2vh;
+        padding-bottom: 2vh;
+        padding: 2vw;
     }
 
     .ins {
@@ -50,6 +52,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
     .stones {
         height: 3vh;
+    }
+
+    input, select {
+        border-radius: .6vh;
     }
 }
 
@@ -59,12 +65,8 @@ input[type="number"]::-webkit-inner-spin-button {
     }
 
     .multiplier {
-        margin-bottom: 1vh;
+        padding-bottom: 3vh;
         padding: 2vh;
-    }
-
-    .total {
-        margin-top: 4vh;
     }
 
     .ins {
@@ -73,6 +75,10 @@ input[type="number"]::-webkit-inner-spin-button {
 
     .stones {
         height: 5vh;
+    }
+
+    input, select {
+        border-radius: .5vw;
     }
 }
 
@@ -88,37 +94,43 @@ input[type="number"]::-webkit-inner-spin-button {
 
 .ins * {
     width: 40%;
+    background-color: rgba(255, 255, 255, .4);
+    border: none;
 }
 
 .stones {
-    width: 100%;
+    width: 96%;
+    background-color: rgba(200, 200, 200, .4);
+    border: none;
 }
 
-.total, .subTot {
+.subTot {
     text-align: right;
     font-size: larger;
+    padding-right: 1vw;
 }
 
 .total span {
+    text-align: center;
     font-size: x-large;
 }
 
 .blue {
-    background-color: #2694d9;
+    background-color: #38a2d1;
 }
 
 .yellow {
-    background-color: #f6ab5a;
+    background-color: #f5c155;
 }
 
 .red {
-    background-color: #e05259;
+    background-color: #da4e49;
 }
 
 .purple {
-    background-color: #8759c0;
+    background-color: #866eaa;
 }
 
 .green {
-    background-color: #39ac5e;
+    background-color: #60ae63;
 }
