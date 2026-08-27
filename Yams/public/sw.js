@@ -1,4 +1,4 @@
-const CACHE_NAME = 'yams-pwa-v1';
+const CACHE_NAME = 'yams-pwa-v2';
 const ASSETS = [
   './',
   './index.html',

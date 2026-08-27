@@ -1,7 +1,7 @@
 {
   "short_name": "Yams",
-  "name": "Yams - Triple Grille de Score",
-  "description": "Une PWA moderne et hors-ligne pour compter les points au Yams (3 colonnes) avec un lanceur de dés virtuel.",
+  "name": "Triple Yams",
+  "description": "Yams à 3 colonnes",
   "icons": [
     {
       "src": "icon.svg",
