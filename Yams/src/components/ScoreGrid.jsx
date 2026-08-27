@@ -55,12 +55,15 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
 
             return (
               <React.Fragment key={rowKey}>
-                {/* Section Separator before Lower Section */}
-                {rowKey === 'brelan' && (
-                  <tr className="bg-indigo-950/10 font-bold border-t border-b border-slate-800/60">
-                    <td colSpan={4} className="p-1 px-3 text-[10px] uppercase tracking-wider text-indigo-400/80">
-                      Section Basse
-                    </td>
+                {/* Middle Section Total */}
+                {rowKey === 'suite' && (
+                  <tr className="bg-slate-950/40 border-t border-b border-slate-800/60 font-medium text-[11px]">
+                    <td className="p-2 px-3 text-slate-400">Total Milieu</td>
+                    {['down', 'free', 'up'].map(col => (
+                      <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
+                        {stats[col].middleTotal}
+                      </td>
+                    ))}
                   </tr>
                 )}
 
@@ -126,7 +129,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                     <tr className="bg-slate-950/40 font-medium text-[11px]">
                       <td className="p-2 px-3">
                         <span className="text-slate-400">Bonus (≥63 pts)</span>
-                        <span className="text-[10px] text-pink-400/80 ml-1.5 font-bold">+35</span>
+                        <span className="text-[10px] text-pink-400/80 ml-1.5 font-bold">+20</span>
                       </td>
                       {['down', 'free', 'up'].map(col => {
                         const hasBonus = stats[col].upperBonus > 0;
@@ -137,7 +140,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                               hasBonus ? 'text-emerald-400' : 'text-slate-500 opacity-40'
                             }`}
                           >
-                            {hasBonus ? '+35' : '0'}
+                            {hasBonus ? '+20' : '0'}
                           </td>
                         );
                       })}

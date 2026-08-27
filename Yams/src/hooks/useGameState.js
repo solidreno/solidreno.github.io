@@ -3,7 +3,8 @@ import confetti from 'canvas-confetti';
 
 export const ROW_KEYS = [
   '1', '2', '3', '4', '5', '6',
-  'brelan', 'carre', 'full', 'petite_suite', 'grande_suite', 'yams', 'chance'
+  'plus', 'moins',
+  'suite', 'full', 'carre', 'yams'
 ];
 
 export const ROW_LABELS = {
@@ -13,13 +14,12 @@ export const ROW_LABELS = {
   '4': { name: 'Quatre (4)', desc: 'Somme des 4' },
   '5': { name: 'Cinq (5)', desc: 'Somme des 5' },
   '6': { name: 'Six (6)', desc: 'Somme des 6' },
-  'brelan': { name: 'Brelan', desc: '3 identiques (Total dés)' },
-  'carre': { name: 'Carré', desc: '4 identiques (Total dés)' },
-  'full': { name: 'Full', desc: '3 + 2 identiques (25 pts)' },
-  'petite_suite': { name: 'Petite Suite', desc: '4 consécutifs (30 pts)' },
-  'grande_suite': { name: 'Grande Suite', desc: '5 consécutifs (40 pts)' },
-  'yams': { name: 'Yams', desc: '5 identiques (50 pts)' },
-  'chance': { name: 'Chance', desc: 'Total des 5 dés' }
+  'plus': { name: 'Plus', desc: 'Somme des 5 dés' },
+  'moins': { name: 'Moins', desc: 'Somme des 5 dés' },
+  'suite': { name: 'Suite', desc: '5 dés consécutifs (20 pts)' },
+  'full': { name: 'Full', desc: '3 + 2 dés identiques (30 pts)' },
+  'carre': { name: 'Carré', desc: '4 dés identiques (40 pts)' },
+  'yams': { name: 'Yams', desc: '5 dés identiques (50 pts)' }
 };
 
 // Initial empty scorecard
@@ -34,71 +34,6 @@ const createEmptyScorecard = () => {
   return scorecard;
 };
 
-// Calculate potential score for a category based on dice values
-export const calculatePotentialScore = (rowKey, dice) => {
-  if (!dice || dice.length !== 5) return 0;
-  
-  const sorted = [...dice].sort((a, b) => a - b);
-  const sum = dice.reduce((a, b) => a + b, 0);
-  
-  // Count frequencies
-  const counts = {};
-  dice.forEach(d => { counts[d] = (counts[d] || 0) + 1; });
-  const freq = Object.values(counts);
-  const maxFreq = Math.max(...freq);
-
-  // Upper section
-  if (['1', '2', '3', '4', '5', '6'].includes(rowKey)) {
-    const val = Number(rowKey);
-    return dice.filter(d => d === val).length * val;
-  }
-
-  // Lower section
-  switch (rowKey) {
-    case 'brelan':
-      return maxFreq >= 3 ? sum : 0;
-      
-    case 'carre':
-      return maxFreq >= 4 ? sum : 0;
-      
-    case 'full': {
-      // 3 of one, 2 of another OR 5 of same
-      const hasThreeAndTwo = freq.includes(3) && freq.includes(2);
-      const hasFive = maxFreq === 5;
-      return (hasThreeAndTwo || hasFive) ? 25 : 0;
-    }
-    
-    case 'petite_suite': {
-      const uniqueStr = Array.from(new Set(sorted)).join('');
-      if (
-        uniqueStr.includes('1234') || 
-        uniqueStr.includes('2345') || 
-        uniqueStr.includes('3456')
-      ) {
-        return 30;
-      }
-      return 0;
-    }
-    
-    case 'grande_suite': {
-      const uniqueStr = Array.from(new Set(sorted)).join('');
-      if (uniqueStr === '12345' || uniqueStr === '23456') {
-        return 40;
-      }
-      return 0;
-    }
-    
-    case 'yams':
-      return maxFreq === 5 ? 50 : 0;
-      
-    case 'chance':
-      return sum;
-      
-    default:
-      return 0;
-  }
-};
-
 // Column score calculations
 export const calculateColumnStats = (columnScores, colName) => {
   const multiplier = 1;
@@ -111,25 +46,38 @@ export const calculateColumnStats = (columnScores, colName) => {
     }
   });
 
-  // Bonus: >= 63 in upper section gets +35
-  const upperBonus = upperSubtotal >= 63 ? 35 : 0;
+  // Bonus: >= 63 in upper section gets +20
+  const upperBonus = upperSubtotal >= 63 ? 20 : 0;
   const upperTotal = upperSubtotal + upperBonus;
+
+  // Middle section calculations
+  const plusVal = columnScores['plus'] !== null ? columnScores['plus'] : null;
+  const moinsVal = columnScores['moins'] !== null ? columnScores['moins'] : null;
+  const acesVal = columnScores['1'] !== null ? columnScores['1'] : 0;
+
+  let middleTotal = 0;
+  if (plusVal !== null && moinsVal !== null) {
+    middleTotal = (plusVal - moinsVal) * acesVal;
+  }
 
   // Lower section sum
   let lowerTotal = 0;
-  ['brelan', 'carre', 'full', 'petite_suite', 'grande_suite', 'yams', 'chance'].forEach(key => {
+  ['suite', 'full', 'carre', 'yams'].forEach(key => {
     if (columnScores[key] !== null) {
       lowerTotal += columnScores[key];
     }
   });
 
-  const rawTotal = upperTotal + lowerTotal;
+  const rawTotal = upperTotal + middleTotal + lowerTotal;
   const finalTotal = rawTotal * multiplier;
 
   return {
     upperSubtotal,
     upperBonus,
     upperTotal,
+    plusVal,
+    moinsVal,
+    middleTotal,
     lowerTotal,
     rawTotal,
     finalTotal,

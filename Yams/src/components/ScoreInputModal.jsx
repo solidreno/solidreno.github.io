@@ -54,9 +54,9 @@ export default function ScoreInputModal({ colName, rowKey, onClose, onSubmit }) 
   // 2. Render Binary Fixed Scores (Full, Petite Suite, Grande Suite, Yams)
   const renderBinaryOptions = () => {
     let fixedPoints = 0;
-    if (rowKey === 'full') fixedPoints = 25;
-    if (rowKey === 'petite_suite') fixedPoints = 30;
-    if (rowKey === 'grande_suite') fixedPoints = 40;
+    if (rowKey === 'carre') fixedPoints = 40;
+    if (rowKey === 'full') fixedPoints = 30;
+    if (rowKey === 'suite') fixedPoints = 20;
     if (rowKey === 'yams') fixedPoints = 50;
 
     return (
@@ -82,7 +82,7 @@ export default function ScoreInputModal({ colName, rowKey, onClose, onSubmit }) 
     );
   };
 
-  // 3. Render Custom Dice Sum Input (Brelan, Carré, Chance)
+  // 3. Render Custom Dice Sum Input (Plus, Moins)
   const renderSumOptions = () => {
     // Generate scores from 5 to 30
     const scoreRange = [];
@@ -144,8 +144,8 @@ export default function ScoreInputModal({ colName, rowKey, onClose, onSubmit }) 
         <div className="p-5">
           {/* Render manual selectors */}
           {isUpperSection && renderUpperOptions()}
-          {!isUpperSection && ['full', 'petite_suite', 'grande_suite', 'yams'].includes(rowKey) && renderBinaryOptions()}
-          {!isUpperSection && ['brelan', 'carre', 'chance'].includes(rowKey) && renderSumOptions()}
+          {!isUpperSection && ['carre', 'full', 'suite', 'yams'].includes(rowKey) && renderBinaryOptions()}
+          {!isUpperSection && ['plus', 'moins'].includes(rowKey) && renderSumOptions()}
         </div>
 
         {/* Cancel Button Footer */}
