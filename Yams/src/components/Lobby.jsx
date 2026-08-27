@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Plus, Trash2, Play, Trophy, Users, ShieldAlert, Award } from 'lucide-react';
 
 export default function Lobby({ startGame, showHistory, historyCount }) {
-  const [playerNames, setPlayerNames] = useState(['Joueur 1']);
+  const [playerNames, setPlayerNames] = useState(() => {
+    const saved = localStorage.getItem('yams_last_players');
+    return saved ? JSON.parse(saved) : ['Joueur 1'];
+  });
   const [currentInput, setCurrentInput] = useState('');
-  const [useMultipliers, setUseMultipliers] = useState(false);
 
   const handleAddPlayer = (e) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ export default function Lobby({ startGame, showHistory, historyCount }) {
 
   const handleStart = () => {
     if (playerNames.length === 0) return;
-    startGame(playerNames, useMultipliers);
+    startGame(playerNames);
   };
 
   return (
@@ -95,27 +97,6 @@ export default function Lobby({ startGame, showHistory, historyCount }) {
             ))}
           </div>
         )}
-      </div>
-
-      {/* Rules Options */}
-      <div className="p-4 rounded-xl bg-slate-950/50 border border-slate-800/80 mb-6">
-        <h3 className="text-sm font-semibold text-slate-200 mb-2">Options de score</h3>
-        <label className="flex items-start gap-3 cursor-pointer select-none">
-          <input
-            type="checkbox"
-            checked={useMultipliers}
-            onChange={(e) => setUseMultipliers(e.target.checked)}
-            className="mt-1 rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-950"
-          />
-          <div>
-            <span className="text-sm font-semibold text-slate-200 block">
-              Multiplicateurs de colonnes
-            </span>
-            <span className="text-xs text-slate-400">
-              Col. Descendante (↓) x1 | Col. Libre (L) x2 | Col. Montante (↑) x3
-            </span>
-          </div>
-        </label>
       </div>
 
       {/* Action Buttons */}

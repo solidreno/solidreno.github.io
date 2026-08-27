@@ -11,7 +11,6 @@ export default function App() {
     players,
     gameStarted,
     activePlayerIndex,
-    useMultipliers,
     winner,
     gameHistory,
     startGame,
@@ -133,13 +132,6 @@ export default function App() {
           <span className="text-sm font-black tracking-tight text-white flex items-center gap-1.5">
             <Trophy size={16} className="text-indigo-400" /> Triple Yams
           </span>
-          <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase border ${
-            useMultipliers 
-              ? 'bg-indigo-50 text-indigo-600 border-indigo-200' 
-              : 'bg-slate-100 text-slate-500 border-slate-200'
-          }`}>
-            {useMultipliers ? 'Multipliers' : 'Standard'}
-          </span>
         </div>
         <button
           onClick={resetGame}
@@ -198,7 +190,6 @@ export default function App() {
           scorecard={viewedPlayer.scorecard}
           isCellPlayable={(col, key, card) => isViewingSelf && isCellPlayable(col, key, card)}
           onCellClick={handleCellClick}
-          useMultipliers={useMultipliers}
         />
       </div>
 

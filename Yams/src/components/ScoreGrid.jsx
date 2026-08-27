@@ -2,9 +2,9 @@ import React from 'react';
 import { Lock, ArrowDown, Shuffle, ArrowUp, Plus } from 'lucide-react';
 import { ROW_KEYS, ROW_LABELS, calculateColumnStats, calculatePlayerTotal } from '../hooks/useGameState';
 
-export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick, useMultipliers }) {
+export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
   // Compute column stats and totals
-  const stats = calculatePlayerTotal(scorecard, useMultipliers);
+  const stats = calculatePlayerTotal(scorecard);
 
   // Column header symbols/icons
   const getColHeader = (col) => {
@@ -14,7 +14,6 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick, useM
           <div className="flex flex-col items-center justify-center">
             <ArrowDown className="text-indigo-400" size={16} />
             <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Desc (↓)</span>
-            {useMultipliers && <span className="text-[10px] text-indigo-300/80 font-semibold">(x1)</span>}
           </div>
         );
       case 'free':
@@ -22,7 +21,6 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick, useM
           <div className="flex flex-col items-center justify-center">
             <Shuffle className="text-pink-400" size={16} />
             <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Libre (L)</span>
-            {useMultipliers && <span className="text-[10px] text-pink-300/80 font-semibold">(x2)</span>}
           </div>
         );
       case 'up':
@@ -30,7 +28,6 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick, useM
           <div className="flex flex-col items-center justify-center">
             <ArrowUp className="text-purple-400" size={16} />
             <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Mont (↑)</span>
-            {useMultipliers && <span className="text-[10px] text-purple-300/80 font-semibold">(x3)</span>}
           </div>
         );
       default:

@@ -100,10 +100,8 @@ export const calculatePotentialScore = (rowKey, dice) => {
 };
 
 // Column score calculations
-export const calculateColumnStats = (columnScores, colName, useMultipliers = false) => {
-  const multiplier = useMultipliers 
-    ? (colName === 'down' ? 1 : colName === 'free' ? 2 : 3) 
-    : 1;
+export const calculateColumnStats = (columnScores, colName) => {
+  const multiplier = 1;
 
   // Upper section sum (1-6)
   let upperSubtotal = 0;
@@ -139,10 +137,10 @@ export const calculateColumnStats = (columnScores, colName, useMultipliers = fal
   };
 };
 
-export const calculatePlayerTotal = (scorecard, useMultipliers = false) => {
-  const downStats = calculateColumnStats(scorecard.down, 'down', useMultipliers);
-  const freeStats = calculateColumnStats(scorecard.free, 'free', useMultipliers);
-  const upStats = calculateColumnStats(scorecard.up, 'up', useMultipliers);
+export const calculatePlayerTotal = (scorecard) => {
+  const downStats = calculateColumnStats(scorecard.down, 'down');
+  const freeStats = calculateColumnStats(scorecard.free, 'free');
+  const upStats = calculateColumnStats(scorecard.up, 'up');
 
   return {
     down: downStats,
@@ -164,9 +162,6 @@ export const useGameState = () => {
   const [activePlayerIndex, setActivePlayerIndex] = useState(() => {
     return Number(localStorage.getItem('yams_active_player_index') || 0);
   });
-  const [useMultipliers, setUseMultipliers] = useState(() => {
-    return localStorage.getItem('yams_use_multipliers') === 'true';
-  });
 
   // Game End & History
   const [winner, setWinner] = useState(null);
@@ -180,18 +175,17 @@ export const useGameState = () => {
     localStorage.setItem('yams_players', JSON.stringify(players));
     localStorage.setItem('yams_game_started', gameStarted);
     localStorage.setItem('yams_active_player_index', activePlayerIndex);
-    localStorage.setItem('yams_use_multipliers', useMultipliers);
-  }, [players, gameStarted, activePlayerIndex, useMultipliers]);
+  }, [players, gameStarted, activePlayerIndex]);
 
   // Start new game
-  const startGame = useCallback((playerNames, multipliersEnabled) => {
+  const startGame = useCallback((playerNames) => {
+    localStorage.setItem('yams_last_players', JSON.stringify(playerNames));
     const newPlayers = playerNames.map((name, index) => ({
       id: index + 1,
       name: name || `Joueur ${index + 1}`,
       scorecard: createEmptyScorecard()
     }));
     setPlayers(newPlayers);
-    setUseMultipliers(multipliersEnabled);
     setGameStarted(true);
     setActivePlayerIndex(0);
     setWinner(null);
@@ -264,7 +258,7 @@ export const useGameState = () => {
       let winningPlayer = null;
       
       const results = updatedPlayers.map(p => {
-        const stats = calculatePlayerTotal(p.scorecard, useMultipliers);
+        const stats = calculatePlayerTotal(p.scorecard);
         if (stats.grandTotal > highestScore) {
           highestScore = stats.grandTotal;
           winningPlayer = p;
@@ -285,8 +279,7 @@ export const useGameState = () => {
           day: '2-digit', month: '2-digit', year: 'numeric',
           hour: '2-digit', minute: '2-digit'
         }),
-        players: results.sort((a, b) => b.score - a.score),
-        useMultipliers
+        players: results.sort((a, b) => b.score - a.score)
       };
 
       const updatedHistory = [newHistoryItem, ...gameHistory];
@@ -303,7 +296,7 @@ export const useGameState = () => {
       // Move to next player
       setActivePlayerIndex(prev => (prev + 1) % players.length);
     }
-  }, [gameStarted, players, activePlayerIndex, useMultipliers, isCellPlayable, isScorecardFilled, gameHistory]);
+  }, [gameStarted, players, activePlayerIndex, isCellPlayable, isScorecardFilled, gameHistory]);
 
   // Force reset game
   const resetGame = useCallback(() => {
@@ -326,7 +319,6 @@ export const useGameState = () => {
     players,
     gameStarted,
     activePlayerIndex,
-    useMultipliers,
     winner,
     gameHistory,
     startGame,

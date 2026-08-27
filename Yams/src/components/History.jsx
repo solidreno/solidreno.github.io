@@ -42,17 +42,9 @@ export default function History({ history, onClose, onClear }) {
               key={game.id}
               className="p-4 rounded-xl bg-slate-950/40 border border-slate-800/80 flex flex-col gap-3"
             >
-              {/* Game Metadata */}
               <div className="flex items-center justify-between text-[10px] text-slate-400 border-b border-slate-900 pb-2">
                 <span className="flex items-center gap-1">
                   <Calendar size={11} /> {game.date}
-                </span>
-                <span className={`px-2 py-0.5 rounded-full font-bold uppercase ${
-                  game.useMultipliers 
-                    ? 'bg-indigo-950 text-indigo-400 border border-indigo-900/30' 
-                    : 'bg-slate-900 text-slate-400'
-                }`}>
-                  {game.useMultipliers ? 'Multiplié' : 'Standard'}
                 </span>
               </div>
 
