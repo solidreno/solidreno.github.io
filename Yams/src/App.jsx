@@ -23,6 +23,7 @@ export default function App() {
   const [showHistoryScreen, setShowHistoryScreen] = useState(false);
   const [selectedCell, setSelectedCell] = useState(null); // { colName, rowKey }
   const [viewedPlayerIndex, setViewedPlayerIndex] = useState(0);
+  const safeViewedPlayerIndex = viewedPlayerIndex < players.length ? viewedPlayerIndex : activePlayerIndex;
 
   // Sync viewed scorecard to the active player when their turn starts
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function App() {
 
   const handleCellClick = (colName, rowKey) => {
     // Only the active player's scorecard can be clicked, and only if we are viewing it
-    if (viewedPlayerIndex !== activePlayerIndex) return;
+    if (safeViewedPlayerIndex !== activePlayerIndex) return;
     
     setSelectedCell({
       colName,
@@ -121,8 +122,8 @@ export default function App() {
   }
 
   const currentPlayer = players[activePlayerIndex];
-  const viewedPlayer = players[viewedPlayerIndex];
-  const isViewingSelf = viewedPlayerIndex === activePlayerIndex;
+  const viewedPlayer = players[safeViewedPlayerIndex] || players[0];
+  const isViewingSelf = safeViewedPlayerIndex === activePlayerIndex;
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto p-4 pb-24 md:pb-28">
@@ -147,7 +148,7 @@ export default function App() {
         <div className="flex gap-1.5 overflow-x-auto pb-3 mb-2 scrollbar-none no-select">
           {players.map((p, idx) => {
             const isActive = idx === activePlayerIndex;
-            const isViewed = idx === viewedPlayerIndex;
+            const isViewed = idx === safeViewedPlayerIndex;
             return (
               <button
                 key={p.id}

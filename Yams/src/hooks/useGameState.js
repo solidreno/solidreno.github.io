@@ -218,7 +218,6 @@ export const useGameState = () => {
       });
 
       setWinner(winningPlayer);
-      setGameStarted(false);
 
       // Save to history
       const newHistoryItem = {
