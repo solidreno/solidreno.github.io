@@ -25,7 +25,7 @@ export const ROW_LABELS = {
 // Initial empty scorecard
 const createEmptyScorecard = () => {
   const scorecard = {};
-  ['down', 'free', 'up'].forEach(col => {
+  ['down', 'up', 'free'].forEach(col => {
     scorecard[col] = {};
     ROW_KEYS.forEach(key => {
       scorecard[col][key] = null;
@@ -131,7 +131,8 @@ export const useGameState = () => {
     const newPlayers = playerNames.map((name, index) => ({
       id: index + 1,
       name: name || `Joueur ${index + 1}`,
-      scorecard: createEmptyScorecard()
+      scorecard: createEmptyScorecard(),
+      lastAction: null
     }));
     setPlayers(newPlayers);
     setGameStarted(true);
@@ -168,7 +169,7 @@ export const useGameState = () => {
 
   // Check if scorecard is completely filled
   const isScorecardFilled = useCallback((scorecard) => {
-    return ['down', 'free', 'up'].every(col => {
+    return ['down', 'up', 'free'].every(col => {
       return ROW_KEYS.every(key => scorecard[col][key] !== null);
     });
   }, []);
@@ -191,7 +192,8 @@ export const useGameState = () => {
             ...p.scorecard[colName],
             [rowKey]: scoreValue
           }
-        }
+        },
+        lastAction: { colName, rowKey }
       };
     });
 
@@ -245,6 +247,33 @@ export const useGameState = () => {
     }
   }, [gameStarted, players, activePlayerIndex, isCellPlayable, isScorecardFilled, gameHistory]);
 
+  // Undo last recorded score for a specific player
+  const undoLastScore = useCallback((playerIdx) => {
+    const player = players[playerIdx];
+    if (!player || !player.lastAction) return;
+
+    const { colName, rowKey } = player.lastAction;
+
+    const updatedPlayers = players.map((p, idx) => {
+      if (idx !== playerIdx) return p;
+      return {
+        ...p,
+        scorecard: {
+          ...p.scorecard,
+          [colName]: {
+            ...p.scorecard[colName],
+            [rowKey]: null
+          }
+        },
+        lastAction: null
+      };
+    });
+
+    setPlayers(updatedPlayers);
+    setActivePlayerIndex(playerIdx);
+    setWinner(null);
+  }, [players]);
+
   // Force reset game
   const resetGame = useCallback(() => {
     setPlayers([]);
@@ -271,6 +300,7 @@ export const useGameState = () => {
     startGame,
     isCellPlayable,
     recordScore,
+    undoLastScore,
     resetGame,
     clearHistory
   };

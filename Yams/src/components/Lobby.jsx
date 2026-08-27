@@ -34,11 +34,14 @@ export default function Lobby({ startGame, showHistory, historyCount }) {
   return (
     <div className="glass-panel p-6 md:p-8 max-w-md w-full mx-auto my-8 animate-fade-in no-select">
       <div className="text-center mb-6">
-        <div className="inline-flex p-3 rounded-full bg-indigo-500/10 text-indigo-400 mb-2">
-          <Trophy size={40} className="pulse-primary-glow rounded-full" />
+        <div className="inline-flex p-1.5 rounded-3xl bg-indigo-500/10 mb-3 shadow-md border border-indigo-500/10">
+          <img 
+            src="icon.svg" 
+            className="w-16 h-16 rounded-2xl object-contain pulse-primary-glow" 
+            alt="Yams Logo" 
+          />
         </div>
-        <h2 className="text-3xl font-extrabold tracking-tight text-white mb-1">Triple Yams PWA</h2>
-        <p className="text-sm text-slate-400">Scorecard interactive & lanceur de dés</p>
+        <h2 className="text-3xl font-extrabold tracking-tight text-white mb-1">Triple Yams</h2>
       </div>
 
       <form onSubmit={handleAddPlayer} className="mb-6">

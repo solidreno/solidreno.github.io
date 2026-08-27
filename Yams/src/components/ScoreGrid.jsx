@@ -41,7 +41,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
         <thead>
           <tr className="bg-slate-950/80 border-b border-slate-800">
             <th className="p-3 font-semibold text-slate-300 w-1/3">Combinaisons</th>
-            {['down', 'free', 'up'].map(col => (
+            {['down', 'up', 'free'].map(col => (
               <th key={col} className="p-2 text-center w-2/9 border-l border-slate-800/50">
                 {getColHeader(col)}
               </th>
@@ -59,7 +59,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                 {rowKey === 'suite' && (
                   <tr className="bg-slate-950/40 border-t border-b border-slate-800/60 font-medium text-[11px]">
                     <td className="p-2 px-3 text-slate-400">Total Milieu</td>
-                    {['down', 'free', 'up'].map(col => (
+                    {['down', 'up', 'free'].map(col => (
                       <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
                         {stats[col].middleTotal}
                       </td>
@@ -75,7 +75,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                   </td>
 
                   {/* Columns */}
-                  {['down', 'free', 'up'].map(col => {
+                  {['down', 'up', 'free'].map(col => {
                     const value = scorecard[col][rowKey];
                     const playable = isCellPlayable(col, rowKey, scorecard);
 
@@ -119,7 +119,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                     {/* Upper Section Subtotal */}
                     <tr className="bg-slate-950/40 border-t border-slate-800 font-medium text-[11px]">
                       <td className="p-2 px-3 text-slate-400">Total Supérieur</td>
-                      {['down', 'free', 'up'].map(col => (
+                      {['down', 'up', 'free'].map(col => (
                         <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
                           {stats[col].upperSubtotal}
                         </td>
@@ -131,7 +131,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                         <span className="text-slate-400">Bonus (≥63 pts)</span>
                         <span className="text-[10px] text-pink-400/80 ml-1.5 font-bold">+20</span>
                       </td>
-                      {['down', 'free', 'up'].map(col => {
+                      {['down', 'up', 'free'].map(col => {
                         const hasBonus = stats[col].upperBonus > 0;
                         return (
                           <td 
@@ -154,7 +154,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
           {/* LOWER SECTION TOTAL */}
           <tr className="bg-slate-950/40 border-t-2 border-slate-800 font-medium text-[11px]">
             <td className="p-2 px-3 text-slate-400">Total Inférieur</td>
-            {['down', 'free', 'up'].map(col => (
+            {['down', 'up', 'free'].map(col => (
               <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
                 {stats[col].lowerTotal}
               </td>
@@ -164,7 +164,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
           {/* COLUMN TOTALS */}
           <tr className="bg-slate-900/60 border-t border-slate-700 font-bold text-xs">
             <td className="p-3 px-3 text-slate-200 uppercase tracking-wide">Total Colonnes</td>
-            {['down', 'free', 'up'].map(col => (
+            {['down', 'up', 'free'].map(col => (
               <td key={col} className="p-3 text-center border-l border-slate-800/40 text-white font-extrabold text-sm">
                 {stats[col].finalTotal}
               </td>

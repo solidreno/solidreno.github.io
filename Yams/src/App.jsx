@@ -1,10 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { LogOut, Trophy, Sparkles, User } from 'lucide-react';
+import { LogOut, Trophy, Sparkles, User, RotateCcw } from 'lucide-react';
 import { useGameState } from './hooks/useGameState';
 import Lobby from './components/Lobby';
 import ScoreGrid from './components/ScoreGrid';
 import ScoreInputModal from './components/ScoreInputModal';
 import History from './components/History';
+
+const getUndoLabel = (lastAction) => {
+  if (!lastAction) return "";
+  const { colName, rowKey } = lastAction;
+  
+  // Column name
+  let colFr = "";
+  if (colName === "down") colFr = "la colonne descente";
+  if (colName === "up") colFr = "la colonne montée";
+  if (colName === "free") colFr = "la colonne libre";
+  
+  // Row name
+  let rowFr = "";
+  if (rowKey === "1") rowFr = "les as";
+  else if (rowKey === "2") rowFr = "les deux";
+  else if (rowKey === "3") rowFr = "les trois";
+  else if (rowKey === "4") rowFr = "les quatre";
+  else if (rowKey === "5") rowFr = "les cinq";
+  else if (rowKey === "6") rowFr = "les six";
+  else if (rowKey === "plus") rowFr = "le plus";
+  else if (rowKey === "moins") rowFr = "le moins";
+  else if (rowKey === "suite") rowFr = "la suite";
+  else if (rowKey === "full") rowFr = "le full";
+  else if (rowKey === "carre") rowFr = "le carré";
+  else if (rowKey === "yams") rowFr = "le yams";
+  
+  return `Annuler ${rowFr} sur ${colFr}`;
+};
 
 export default function App() {
   const {
@@ -16,6 +44,7 @@ export default function App() {
     startGame,
     isCellPlayable,
     recordScore,
+    undoLastScore,
     resetGame,
     clearHistory
   } = useGameState();
@@ -33,6 +62,8 @@ export default function App() {
   }, [activePlayerIndex, gameStarted, players.length]);
 
   const handleCellClick = (colName, rowKey) => {
+    // Prevent scoring clicks if the game is finished
+    if (winner) return;
     // Only the active player's scorecard can be clicked, and only if we are viewing it
     if (safeViewedPlayerIndex !== activePlayerIndex) return;
     
@@ -61,52 +92,7 @@ export default function App() {
     );
   }
 
-  // Render Winner / Victory Screen
-  if (winner) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 no-select">
-        <div className="glass-panel p-8 max-w-sm w-full text-center border-emerald-500/20 animate-scale-up">
-          <div className="inline-flex p-4 rounded-full bg-emerald-500/10 text-emerald-400 mb-4 animate-bounce">
-            <Trophy size={48} />
-          </div>
-          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-indigo-300 mb-1">
-            Partie Terminée !
-          </h2>
-          <p className="text-slate-400 text-sm mb-5">Le score final a été calculé</p>
 
-          <div className="p-5 rounded-2xl bg-indigo-950/20 border border-indigo-900/30 mb-6">
-            <span className="text-xs text-indigo-400 uppercase font-bold tracking-wider block mb-1">
-              Vainqueur 🎉
-            </span>
-            <span className="text-2xl font-black text-white block mb-1">{winner.name}</span>
-            <span className="text-emerald-400 font-extrabold text-lg">
-              Score total : {winner.scorecard ? winner.scorecard.grandTotal : ''} pts
-            </span>
-          </div>
-
-          {/* Leaderboard list */}
-          <div className="space-y-2 mb-6 text-left max-h-36 overflow-y-auto pr-1">
-            <h4 className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Tableau des scores</h4>
-            {players.map((p, index) => (
-              <div key={p.id} className="flex justify-between items-center text-xs py-1.5 border-b border-slate-900/50">
-                <span className="text-slate-300 font-medium">{index + 1}. {p.name}</span>
-                <span className="text-slate-400 font-bold">
-                  {p.scorecard ? p.scorecard.grandTotal : ''} pts
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <button
-            onClick={resetGame}
-            className="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all flex items-center justify-center gap-2"
-          >
-            <Sparkles size={16} /> Revenir au menu principal
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   // Render Lobby Screen
   if (!gameStarted) {
@@ -170,20 +156,67 @@ export default function App() {
         </div>
       )}
 
-      {/* Active turn alert */}
-      <div className="mb-3 p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 flex items-center justify-between text-xs select-none">
-        <span className="text-slate-500">
-          Tour de : <strong className="text-slate-800 font-bold">{currentPlayer.name}</strong>
-        </span>
-        {!isViewingSelf && (
-          <button
-            onClick={() => setViewedPlayerIndex(activePlayerIndex)}
-            className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold underline cursor-pointer"
-          >
-            Afficher ma grille
-          </button>
-        )}
-      </div>
+      {/* Active turn alert or Game over banner */}
+      {winner ? (
+        <div className="mb-3 p-3 rounded-xl bg-emerald-600 border border-emerald-500 text-white flex flex-col gap-2.5 text-xs select-none shadow-md animate-fade-in">
+          {/* First row: Turn indicator & Rejouer */}
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <Trophy size={14} fill="currentColor" className="text-amber-300" />
+              <span>
+                Partie terminée ! <strong>{winner.name}</strong> a gagné !
+              </span>
+            </div>
+            <button
+              onClick={resetGame}
+              className="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-emerald-700 font-bold text-[10px] uppercase tracking-wide cursor-pointer transition-colors shadow-sm"
+            >
+              Rejouer
+            </button>
+          </div>
+          
+          {/* Second row: Descriptive Undo button (on separate line) */}
+          {viewedPlayer.lastAction && (
+            <div className="border-t border-emerald-500/60 pt-2 flex justify-start">
+              <button
+                onClick={() => undoLastScore(safeViewedPlayerIndex)}
+                className="flex items-center gap-1.5 px-3 py-1 rounded bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-[10px] cursor-pointer transition-all shadow-sm border border-emerald-600/40"
+              >
+                <RotateCcw size={10} /> {getUndoLabel(viewedPlayer.lastAction)}
+              </button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mb-3 p-2.5 rounded-xl bg-slate-100 border border-slate-200/60 flex flex-col gap-2 text-xs select-none shadow-sm">
+          {/* First row: Turn indicator & Afficher ma grille */}
+          <div className="flex items-center justify-between w-full">
+            <span className="text-slate-500">
+              Tour de : <strong className="text-slate-800 font-bold">{currentPlayer.name}</strong>
+            </span>
+            {!isViewingSelf && (
+              <button
+                onClick={() => setViewedPlayerIndex(activePlayerIndex)}
+                className="text-[10px] text-indigo-400 hover:text-indigo-300 font-bold underline cursor-pointer"
+              >
+                Afficher sa grille
+              </button>
+            )}
+          </div>
+          
+          {/* Second row: Descriptive Undo button (on separate line) */}
+          {viewedPlayer.lastAction && (
+            <div className="border-t border-slate-200/50 pt-2 flex justify-start">
+              <button
+                onClick={() => undoLastScore(safeViewedPlayerIndex)}
+                className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-semibold text-[10px] cursor-pointer transition-all shadow-sm"
+              >
+                <RotateCcw size={10} /> {getUndoLabel(viewedPlayer.lastAction)}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Score Grid scorecard */}
       <div className="flex-1 mb-4">

@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft, Trash2, Calendar, Award, ShieldCheck } from 'lucide-react';
 
 export default function History({ history, onClose, onClear }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const handleClear = () => {
-    if (window.confirm('Voulez-vous vraiment effacer tout l\'historique des scores ?')) {
-      onClear();
-    }
+    onClear();
+    setShowConfirm(false);
   };
+
+  if (showConfirm) {
+    return (
+      <div className="glass-panel p-6 max-w-md w-full mx-auto my-8 animate-scale-up no-select text-center border-rose-500/20">
+        <div className="inline-flex p-3 rounded-full bg-rose-500/10 text-rose-400 mb-4 animate-pulse">
+          <Trash2 size={32} />
+        </div>
+        <h3 className="text-base font-extrabold text-white mb-2">
+          Effacer l'historique ?
+        </h3>
+        <p className="text-slate-400 text-xs mb-6 leading-relaxed">
+          Cette action est irréversible. Toutes les parties enregistrées seront supprimées définitivement.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowConfirm(false)}
+            className="flex-1 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 font-semibold text-xs transition-colors cursor-pointer"
+          >
+            Annuler
+          </button>
+          <button
+            onClick={handleClear}
+            className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-colors shadow-lg shadow-rose-600/10 cursor-pointer"
+          >
+            Confirmer
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="glass-panel p-6 max-w-md w-full mx-auto my-8 animate-fade-in no-select">
@@ -21,8 +52,8 @@ export default function History({ history, onClose, onClear }) {
         <h2 className="text-xl font-extrabold text-white">Historique</h2>
         {history.length > 0 && (
           <button
-            onClick={handleClear}
-            className="p-2 rounded-xl bg-rose-950/20 hover:bg-rose-900/20 border border-rose-900/30 text-rose-400 hover:text-rose-300 transition-colors"
+            onClick={() => setShowConfirm(true)}
+            className="p-2 rounded-xl bg-rose-950/20 hover:bg-rose-900/20 border border-rose-900/30 text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
             title="Effacer tout"
           >
             <Trash2 size={15} />
