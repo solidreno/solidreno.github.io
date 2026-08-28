@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, ArrowDown, Shuffle, ArrowUp, Plus } from 'lucide-react';
+import { Lock, ArrowDown, Shuffle, ArrowUp } from 'lucide-react';
 import { ROW_KEYS, ROW_LABELS, calculateColumnStats, calculatePlayerTotal } from '../hooks/useGameState';
 
 export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
@@ -12,22 +12,22 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
       case 'down':
         return (
           <div className="flex flex-col items-center justify-center">
-            <ArrowDown className="text-indigo-400" size={16} />
-            <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Desc (↓)</span>
+            <ArrowDown className="text-indigo-300 font-extrabold" size={16} />
+            <span className="text-[10px] uppercase font-extrabold text-slate-200 mt-0.5">Desc (↓)</span>
           </div>
         );
       case 'free':
         return (
           <div className="flex flex-col items-center justify-center">
-            <Shuffle className="text-pink-400" size={16} />
-            <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Libre (L)</span>
+            <Shuffle className="text-pink-300 font-extrabold" size={16} />
+            <span className="text-[10px] uppercase font-extrabold text-slate-200 mt-0.5">Libre (L)</span>
           </div>
         );
       case 'up':
         return (
           <div className="flex flex-col items-center justify-center">
-            <ArrowUp className="text-purple-400" size={16} />
-            <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">Mont (↑)</span>
+            <ArrowUp className="text-purple-300 font-extrabold" size={16} />
+            <span className="text-[10px] uppercase font-extrabold text-slate-200 mt-0.5">Mont (↑)</span>
           </div>
         );
       default:
@@ -40,7 +40,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
       <table className="w-full border-collapse text-left text-xs no-select">
         <thead>
           <tr className="bg-slate-950/80 border-b border-slate-800">
-            <th className="p-3 font-semibold text-slate-300 w-1/3">Combinaisons</th>
+            <th className="p-3 font-bold text-slate-200 uppercase tracking-wider text-[10px] w-1/3">Combinaisons</th>
             {['down', 'up', 'free'].map(col => (
               <th key={col} className="p-2 text-center w-2/9 border-l border-slate-800/50">
                 {getColHeader(col)}
@@ -57,10 +57,10 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
               <React.Fragment key={rowKey}>
                 {/* Middle Section Total */}
                 {rowKey === 'suite' && (
-                  <tr className="bg-slate-950/40 border-t border-b border-slate-800/60 font-medium text-[11px]">
-                    <td className="p-2 px-3 text-slate-400">Total Milieu</td>
+                  <tr className="bg-slate-950/5 border-t border-b border-slate-800/40 font-bold text-[10px]">
+                    <td className="p-2 px-3 text-slate-700 uppercase tracking-wider font-extrabold">Total Milieu</td>
                     {['down', 'up', 'free'].map(col => (
-                      <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
+                      <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-800 font-extrabold text-[11px]">
                         {stats[col].middleTotal}
                       </td>
                     ))}
@@ -70,8 +70,8 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                 <tr className="hover:bg-slate-900/10 transition-colors">
                   {/* Row Label */}
                   <td className="p-2.5 px-3">
-                    <div className="font-semibold text-slate-100">{labelInfo.name}</div>
-                    <div className="text-[10px] text-slate-400 hidden sm:block">{labelInfo.desc}</div>
+                    <div className="font-bold text-slate-800 text-[12px]">{labelInfo.name}</div>
+                    <div className="text-[9.5px] text-slate-500 font-medium hidden sm:block leading-none mt-0.5">{labelInfo.desc}</div>
                   </td>
 
                   {/* Columns */}
@@ -86,17 +86,17 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                     if (value !== null) {
                       // Already scored
                       cellContent = (
-                        <span className="font-bold text-sm text-indigo-300">
-                          {value}
+                        <span className={`font-bold ${value === 0 ? 'text-rose-500 font-extrabold text-sm' : 'text-indigo-300 text-sm'}`}>
+                          {value === 0 ? 'X' : value}
                         </span>
                       );
                       cellClass += "bg-indigo-950/5";
                     } else if (playable) {
-                      // Playable cell
-                      cellClass += " cursor-pointer bg-indigo-50/20 hover:bg-indigo-500/10 transition-all duration-150";
+                      // Playable cell (higher contrast indigo background & prominent dots)
+                      cellClass += " cell-playable transition-all duration-150";
                       cellContent = (
-                        <div className="w-full h-full flex items-center justify-center text-indigo-400/80 hover:text-indigo-600">
-                          <Plus size={16} />
+                        <div className="w-full h-full flex items-center justify-center text-indigo-600/80 hover:text-indigo-600 font-extrabold text-[17px] tracking-widest leading-none select-none pb-0.5">
+                          ...
                         </div>
                       );
                     } else {
@@ -117,27 +117,27 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
                 {rowKey === '6' && (
                   <>
                     {/* Upper Section Subtotal */}
-                    <tr className="bg-slate-950/40 border-t border-slate-800 font-medium text-[11px]">
-                      <td className="p-2 px-3 text-slate-400">Total Supérieur</td>
+                    <tr className="bg-slate-950/5 border-t border-slate-800/40 font-bold text-[10px]">
+                      <td className="p-2 px-3 text-slate-700 uppercase tracking-wider font-extrabold">Total Supérieur</td>
                       {['down', 'up', 'free'].map(col => (
-                        <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
+                        <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-800 font-extrabold text-[11px]">
                           {stats[col].upperSubtotal}
                         </td>
                       ))}
                     </tr>
                     {/* Bonus Row */}
-                    <tr className="bg-slate-950/40 font-medium text-[11px]">
+                    <tr className="bg-slate-950/5 font-bold text-[10px]">
                       <td className="p-2 px-3">
-                        <span className="text-slate-400">Bonus (≥63 pts)</span>
-                        <span className="text-[10px] text-pink-400/80 ml-1.5 font-bold">+20</span>
+                        <span className="text-slate-700 uppercase tracking-wider font-extrabold">Bonus (≥63 pts)</span>
+                        <span className="text-[10px] text-pink-600 ml-1.5 font-black">+20</span>
                       </td>
                       {['down', 'up', 'free'].map(col => {
                         const hasBonus = stats[col].upperBonus > 0;
                         return (
                           <td 
                             key={col} 
-                            className={`p-2 text-center border-l border-slate-800/40 font-bold ${
-                              hasBonus ? 'text-emerald-400' : 'text-slate-500 opacity-40'
+                            className={`p-2 text-center border-l border-slate-800/40 font-extrabold text-[11px] ${
+                              hasBonus ? 'text-emerald-600' : 'text-slate-400'
                             }`}
                           >
                             {hasBonus ? '+20' : '0'}
@@ -152,10 +152,10 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
           })}
 
           {/* LOWER SECTION TOTAL */}
-          <tr className="bg-slate-950/40 border-t-2 border-slate-800 font-medium text-[11px]">
-            <td className="p-2 px-3 text-slate-400">Total Inférieur</td>
+          <tr className="bg-slate-950/5 border-t-2 border-slate-800/60 font-bold text-[10px]">
+            <td className="p-2 px-3 text-slate-700 uppercase tracking-wider font-extrabold">Total Inférieur</td>
             {['down', 'up', 'free'].map(col => (
-              <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-300 font-semibold">
+              <td key={col} className="p-2 text-center border-l border-slate-800/40 text-slate-800 font-extrabold text-[11px]">
                 {stats[col].lowerTotal}
               </td>
             ))}
@@ -163,7 +163,7 @@ export default function ScoreGrid({ scorecard, isCellPlayable, onCellClick }) {
 
           {/* COLUMN TOTALS */}
           <tr className="bg-slate-900/60 border-t border-slate-700 font-bold text-xs">
-            <td className="p-3 px-3 text-slate-200 uppercase tracking-wide">Total Colonnes</td>
+            <td className="p-3 px-3 text-slate-100 uppercase tracking-wider font-black text-[11px]">Total Colonnes</td>
             {['down', 'up', 'free'].map(col => (
               <td key={col} className="p-3 text-center border-l border-slate-800/40 text-white font-extrabold text-sm">
                 {stats[col].finalTotal}

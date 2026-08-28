@@ -45,6 +45,7 @@ export default function App() {
     isCellPlayable,
     recordScore,
     undoLastScore,
+    replayGame,
     resetGame,
     clearHistory
   } = useGameState();
@@ -168,7 +169,7 @@ export default function App() {
               </span>
             </div>
             <button
-              onClick={resetGame}
+              onClick={replayGame}
               className="px-2.5 py-1 rounded bg-white hover:bg-slate-100 text-emerald-700 font-bold text-[10px] uppercase tracking-wide cursor-pointer transition-colors shadow-sm"
             >
               Rejouer

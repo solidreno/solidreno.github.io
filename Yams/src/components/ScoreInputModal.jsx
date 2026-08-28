@@ -96,13 +96,7 @@ export default function ScoreInputModal({ colName, rowKey, onClose, onSubmit }) 
           Sélectionnez la somme totale des 5 dés :
         </p>
         
-        {/* Rayer button */}
-        <button
-          onClick={() => onSubmit(0)}
-          className="w-full py-2.5 mb-2 rounded-xl bg-slate-900/60 hover:bg-slate-900 border border-slate-800 text-rose-400 font-bold text-sm"
-        >
-          Rayer la case (0)
-        </button>
+
 
         <div className="grid grid-cols-6 gap-1.5 max-h-56 overflow-y-auto p-1.5 bg-slate-950/50 rounded-xl border border-slate-900">
           {scoreRange.map((score) => (

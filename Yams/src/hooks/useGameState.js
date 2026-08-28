@@ -269,8 +269,27 @@ export const useGameState = () => {
       };
     });
 
+    // If the game was finished, remove the game record from history
+    if (winner) {
+      const updatedHistory = gameHistory.slice(1);
+      setGameHistory(updatedHistory);
+      localStorage.setItem('yams_history', JSON.stringify(updatedHistory));
+    }
+
     setPlayers(updatedPlayers);
     setActivePlayerIndex(playerIdx);
+    setWinner(null);
+  }, [players, winner, gameHistory]);
+
+  // Reset scorecard but keep same players to play again
+  const replayGame = useCallback(() => {
+    const resetPlayers = players.map(p => ({
+      ...p,
+      scorecard: createEmptyScorecard(),
+      lastAction: null
+    }));
+    setPlayers(resetPlayers);
+    setActivePlayerIndex(0);
     setWinner(null);
   }, [players]);
 
@@ -301,6 +320,7 @@ export const useGameState = () => {
     isCellPlayable,
     recordScore,
     undoLastScore,
+    replayGame,
     resetGame,
     clearHistory
   };
