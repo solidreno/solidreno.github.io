@@ -6,6 +6,115 @@ import ScoreGrid from './components/ScoreGrid';
 import ScoreInputModal from './components/ScoreInputModal';
 import History from './components/History';
 
+const GENERAL_MESSAGES = [
+  "Ouch...",
+  "Aïe !",
+  "Pathétique.",
+  "C'est tout ?",
+  "Nul.",
+  "Sérieux ?",
+  "La honte !",
+  "Zéro pointé.",
+  "Next !",
+  "Bof...",
+  "Quel talent !",
+  "Magnifique...",
+  "Du grand art.",
+  "Champion du monde.",
+  "Impressionnant.",
+  "Un coup de maître.",
+  "Presque ! (Mais non)",
+  "C'est fait exprès ?",
+  "Stratégie audacieuse.",
+  "On applaudit.",
+  "Change de dés !",
+  "Pas ton jour.",
+  "La poisse...",
+  "Les dés te détestent.",
+  "Karma.",
+  "Relance pour voir ? (Ah, tu peux plus)",
+  "Souffle sur les dés !",
+  "Maudit.",
+  "Encore raté.",
+  "Fâcheux.",
+  "Mon chat ferait mieux.",
+  "Arrête de jouer.",
+  "Désinstalle le jeu.",
+  "Tu le fais exprès ?",
+  "Même l'IA a pitié.",
+  "Au fond du trou.",
+  "Catastrophique.",
+  "C'est un gag ?",
+  "Triste à pleurer.",
+  "Joue au Loto plutôt."
+];
+
+const BULLE_MESSAGES = [
+  "Dans le vide !",
+  "Hop, poubelle.",
+  "Barré !",
+  "Une belle bulle.",
+  "Tout ça pour ça.",
+  "Adieu les points.",
+  "Et c'est le zéro !",
+  "Dommage...",
+  "Plouf.",
+  "Direct à la poubelle."
+];
+
+const CONGRATS_MESSAGES = [
+  "Bingo !",
+  "Boom !",
+  "Parfait.",
+  "Propre.",
+  "Excellent.",
+  "Magistral.",
+  "Top !",
+  "Superbe.",
+  "Joli !",
+  "Brillant.",
+  "Bien joué !",
+  "Quel talent !",
+  "Du grand art.",
+  "Un vrai pro.",
+  "Impressionnant.",
+  "Maître des dés.",
+  "La grande classe.",
+  "Inarrêtable !",
+  "Coup de génie.",
+  "Respect total.",
+  "Insolent de chance !",
+  "Les dés t'adorent.",
+  "Main en or.",
+  "Quelle chance !",
+  "Les astres sont alignés.",
+  "Le karma parfait.",
+  "Va jouer au casino !",
+  "Probabilités vaincues.",
+  "Touché par la grâce.",
+  "Incroyable mais vrai.",
+  "Jackpot !",
+  "Carton plein !",
+  "Le coup parfait.",
+  "Maximum de points !",
+  "Historique !",
+  "Pluie de points.",
+  "Ça, c'est du lourd.",
+  "Imbattable !",
+  "Explosion de points !",
+  "Le boss est là.",
+  "Tu triches ?",
+  "Calme-toi !",
+  "Laisse-en aux autres !",
+  "Même l'IA est jalouse.",
+  "C'est illégal à ce stade.",
+  "Tu as vendu ton âme ?",
+  "Rentre chez toi, c'est gagné.",
+  "Apprends-moi !",
+  "On a un champion ici.",
+  "Le roi du Yam's !"
+];
+
 const getUndoLabel = (lastAction) => {
   if (!lastAction) return "";
   const { colName, rowKey } = lastAction;
@@ -54,6 +163,17 @@ export default function App() {
   const [selectedCell, setSelectedCell] = useState(null); // { colName, rowKey }
   const [viewedPlayerIndex, setViewedPlayerIndex] = useState(0);
   const safeViewedPlayerIndex = viewedPlayerIndex < players.length ? viewedPlayerIndex : activePlayerIndex;
+  
+  const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => {
+        setToast(null);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   // Sync viewed scorecard to the active player when their turn starts
   useEffect(() => {
@@ -77,6 +197,44 @@ export default function App() {
   const handleModalSubmit = (scoreValue) => {
     if (!selectedCell) return;
     recordScore(selectedCell.colName, selectedCell.rowKey, scoreValue);
+    
+    // Easter Egg toast message if scoring 0 or 1 die in the upper section
+    const isUpperSection = ['1', '2', '3', '4', '5', '6'].includes(selectedCell.rowKey);
+    if (isUpperSection && (scoreValue === 0 || scoreValue === Number(selectedCell.rowKey))) {
+      let pool = [...GENERAL_MESSAGES];
+      if (scoreValue === 0) {
+        pool = [...pool, ...BULLE_MESSAGES];
+      }
+      const randomMsg = pool[Math.floor(Math.random() * pool.length)];
+      setToast(randomMsg);
+    }
+
+    // Easter Egg congratulations toast message
+    let showCongrats = false;
+    if (isUpperSection) {
+      if (scoreValue === Number(selectedCell.rowKey) * 5) {
+        showCongrats = true;
+      }
+      if (selectedCell.rowKey === '1' && (scoreValue === 4 || scoreValue === 5)) {
+        showCongrats = true;
+      }
+    } else {
+      if (selectedCell.rowKey === 'yams' && scoreValue === 50) {
+        showCongrats = true;
+      }
+      if (selectedCell.rowKey === 'plus' && scoreValue > 28) {
+        showCongrats = true;
+      }
+      if (selectedCell.rowKey === 'moins' && scoreValue < 7) {
+        showCongrats = true;
+      }
+    }
+
+    if (showCongrats) {
+      const randomMsg = CONGRATS_MESSAGES[Math.floor(Math.random() * CONGRATS_MESSAGES.length)];
+      setToast(randomMsg);
+    }
+    
     setSelectedCell(null);
   };
 
@@ -113,7 +271,14 @@ export default function App() {
   const isViewingSelf = safeViewedPlayerIndex === activePlayerIndex;
 
   return (
-    <div className="min-h-screen flex flex-col max-w-md mx-auto p-4 pb-24 md:pb-28">
+    <div className="min-h-screen flex flex-col max-w-md mx-auto p-4 pb-24 md:pb-28 relative">
+      {/* Toast Notification */}
+      {toast && (
+        <div className="toast-notification animate-toast">
+          <span>{toast}</span>
+        </div>
+      )}
+
       {/* Top Navbar */}
       <header className="flex items-center justify-between py-3 mb-3 border-b border-slate-800/40 select-none">
         <div className="flex items-center gap-2">
